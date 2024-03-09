@@ -1,4 +1,4 @@
-package com.test.microstreaming.models;
+package com.test.microstreaming.models.message;
 
 import java.util.ArrayList;
 import java.util.List;

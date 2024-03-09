@@ -1,18 +1,13 @@
 package com.test.microstreaming.models;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.List;
 
-@Document
-public class StoredData {
+public class StatisticsResults {
 
-    public StoredData() {
+    public StatisticsResults() {
         processedAt = System.currentTimeMillis();
     }
 
-    protected String id;
-    protected String feed;
     protected double media;
     protected double mediana;
     protected int moda;
@@ -21,23 +16,6 @@ public class StoredData {
     protected int maximo;
     protected int minimo;
     protected long processedAt;
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFeed() {
-        return feed;
-    }
-
-    public void setFeed(String feed) {
-        this.feed = feed;
-    }
 
     public double getMedia() {
         return media;

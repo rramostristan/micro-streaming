@@ -1,4 +1,4 @@
-package com.test.microstreaming.models;
+package com.test.microstreaming.models.message;
 
 public class OpenGateDatapoint {
 

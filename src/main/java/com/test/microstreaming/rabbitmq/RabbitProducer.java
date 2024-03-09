@@ -1,14 +1,15 @@
 package com.test.microstreaming.rabbitmq;
 
-import com.test.microstreaming.models.OpenGateDataStream;
-import com.test.microstreaming.models.OpenGateDatapoint;
-import com.test.microstreaming.models.OpenGateMessage;
+import com.test.microstreaming.models.message.OpenGateDataStreamMessage;
+import com.test.microstreaming.models.message.OpenGateDatapoint;
+import com.test.microstreaming.models.message.OpenGateMessage;
+import com.test.microstreaming.utils.JSONUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +26,11 @@ public class RabbitProducer {
 
     @Scheduled(fixedRate = 6000)
     public void sendMessage() {
-        rabbitTemplate.convertAndSend(queue, generateMessage());
+        LoggerFactory.getLogger(this.getClass()).error("Se ha enviado");
+        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage()));
+        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage()));
+        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage()));
+        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage()));
     }
 
     protected OpenGateMessage generateMessage() {
@@ -36,8 +41,8 @@ public class RabbitProducer {
         return message;
     }
 
-    protected OpenGateDataStream getDataStream(String id) {
-        OpenGateDataStream stream = new OpenGateDataStream();
+    protected OpenGateDataStreamMessage getDataStream(String id) {
+        OpenGateDataStreamMessage stream = new OpenGateDataStreamMessage();
         stream.setId(id);
         stream.setFeed(id);
         int limit = Objects.equals("temperature", id) ? 40 : 300;

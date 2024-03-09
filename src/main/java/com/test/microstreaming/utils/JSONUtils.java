@@ -1,8 +1,10 @@
 package com.test.microstreaming.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
 
@@ -20,7 +22,21 @@ public class JSONUtils {
 
     public static <T> T fromJson(String json, Class<T> clazz) {
         try {
+            if (ObjectUtils.isEmpty(json)) {
+                return null;
+            }
             return mapper.readValue(json, clazz);
+        } catch (IOException ex) {
+            throw new RuntimeException("JSON_ERROR", ex);
+        }
+    }
+
+    public static <T> T fromJson(String json,  TypeReference<T> type) {
+        try {
+            if (ObjectUtils.isEmpty(json)) {
+                return null;
+            }
+            return mapper.readValue(json, type);
         } catch (IOException ex) {
             throw new RuntimeException("JSON_ERROR", ex);
         }

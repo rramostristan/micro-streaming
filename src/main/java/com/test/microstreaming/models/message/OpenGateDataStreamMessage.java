@@ -3,7 +3,7 @@ package com.test.microstreaming.models.message;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenGateDataStream {
+public class OpenGateDataStreamMessage {
 
     protected String id;
     protected String feed;

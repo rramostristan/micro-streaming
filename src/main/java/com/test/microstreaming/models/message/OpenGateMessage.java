@@ -1,4 +1,4 @@
-package com.test.microstreaming.models;
+package com.test.microstreaming.models.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ public class OpenGateMessage {
     protected String device;
     protected String path;
     protected String trustedBoot;
-    protected List<OpenGateDataStream> datastreams = new ArrayList<>();
+    protected List<OpenGateDataStreamMessage> datastreams = new ArrayList<>();
 
     public String getVersion() {
         return version;
@@ -43,11 +43,11 @@ public class OpenGateMessage {
         this.trustedBoot = trustedBoot;
     }
 
-    public List<OpenGateDataStream> getDatastreams() {
+    public List<OpenGateDataStreamMessage> getDatastreams() {
         return datastreams;
     }
 
-    public void setDatastreams(List<OpenGateDataStream> datastreams) {
+    public void setDatastreams(List<OpenGateDataStreamMessage> datastreams) {
         this.datastreams = datastreams;
     }
 }

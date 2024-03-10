@@ -1,11 +1,12 @@
 package com.test.microstreaming.models;
 
+import java.util.Date;
 import java.util.List;
 
 public class StatisticsResults {
 
     public StatisticsResults() {
-        processedAt = System.currentTimeMillis();
+        processedAt = new Date();
     }
 
     protected double media;
@@ -15,7 +16,7 @@ public class StatisticsResults {
     protected List<Double> cuartiles;
     protected int maximo;
     protected int minimo;
-    protected long processedAt;
+    protected Date processedAt;
 
     public double getMedia() {
         return media;
@@ -73,11 +74,11 @@ public class StatisticsResults {
         this.minimo = minimo;
     }
 
-    public long getProcessedAt() {
+    public Date getProcessedAt() {
         return processedAt;
     }
 
-    public void setProcessedAt(long processedAt) {
+    public void setProcessedAt(Date processedAt) {
         this.processedAt = processedAt;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +24,7 @@ public class RabbitConsumer {
     @Value("${rabbitmq.queue}")
     protected String queue;
 
-    @Value("${rabbit.batch.size:10}")
+    @Value("${rabbitmq.batch.size:10}")
     protected int batchSize;
 
     @Autowired
@@ -32,7 +33,7 @@ public class RabbitConsumer {
     @Autowired
     protected StatisticsManager statisticsManager;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRateString = "${rabbitmq.consume.rate:60000}")
     public void consume() {
         OpenGateMessage message = new OpenGateMessage();
         int receivedMessages = 0;
@@ -46,8 +47,16 @@ public class RabbitConsumer {
     }
 
     protected void processMessage(OpenGateMessage message) {
-        Statistics statistics = new Statistics(message.getDevice());
-        List<DataStream> dataStreams = new ArrayList<>();
+        Statistics statistics;
+        List<DataStream> dataStreams;
+        if (statisticsManager.existsById(message.getDevice())) {
+            statistics = statisticsManager.findById(message.getDevice());
+            dataStreams = statistics.getDataStreams();
+        } else {
+            statistics = new Statistics(message.getDevice());
+            dataStreams = new ArrayList<>();
+        }
+
         List<OpenGateDataStreamMessage> dataStreamMessages = message.getDatastreams();
         for (OpenGateDataStreamMessage dataStreamMessage : dataStreamMessages) {
             List<Integer> values = dataStreamMessage.getDatapoints().stream().map(datapoint -> (Integer) datapoint.getValue()).collect(Collectors.toList());

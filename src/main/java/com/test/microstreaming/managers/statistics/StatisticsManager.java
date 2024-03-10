@@ -29,4 +29,8 @@ public class StatisticsManager {
         }
         return statistics.get();
     }
+
+    public boolean existsById(String id) {
+        return statisticsRepository.existsById(id);
+    }
 }

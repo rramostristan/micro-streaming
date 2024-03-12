@@ -4,9 +4,12 @@ import com.test.microstreaming.models.message.OpenGateDataStreamMessage;
 import com.test.microstreaming.models.message.OpenGateDatapoint;
 import com.test.microstreaming.models.message.OpenGateMessage;
 import com.test.microstreaming.utils.JSONUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,22 +19,24 @@ import java.util.Objects;
 import java.util.Random;
 
 @Component
+@ConditionalOnProperty(name = "rabbitmq.producer.enabled", havingValue = "true", matchIfMissing = false)
 public class RabbitProducer {
 
+    protected static Logger logger = LoggerFactory.getLogger(RabbitProducer.class);
     @Value("${rabbitmq.queue}")
     protected String queue;
-
-    @Value("${rabbitmq.producer.enabled:false}")
-    protected boolean enabled;
 
     @Autowired
     protected AmqpTemplate rabbitTemplate;
 
     @Scheduled(fixedRateString = "${rabbitmq.produce.rate:60000}")
     public void sendMessage() {
-        if (enabled) {
+        try {
             rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 1")));
             rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 2")));
+            logger.info("Two new messages sent");
+        } catch (Exception e) {
+            logger.error("Error sending messages", e);
         }
     }
 

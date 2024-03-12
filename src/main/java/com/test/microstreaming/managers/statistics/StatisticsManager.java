@@ -1,18 +1,22 @@
 package com.test.microstreaming.managers.statistics;
 
+import com.test.microstreaming.exceptions.ResourceNotFoundException;
 import com.test.microstreaming.models.DataStream;
 import com.test.microstreaming.models.Statistics;
 import com.test.microstreaming.models.StatisticsResults;
 import com.test.microstreaming.models.message.OpenGateDataStreamMessage;
 import com.test.microstreaming.models.message.OpenGateMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class StatisticsManager implements IStatisticsManager {
+
+    protected static Logger logger = LoggerFactory.getLogger(StatisticsManager.class);
 
     @Autowired
     private StatisticsRepository statisticsRepository;
@@ -28,10 +32,11 @@ public class StatisticsManager implements IStatisticsManager {
     }
 
     @Override
-    public Statistics findById(String id) throws NoSuchElementException {
+    public Statistics findById(String id) throws ResourceNotFoundException {
         Optional<Statistics> statistics = statisticsRepository.findById(id);
         if (statistics.isEmpty()) {
-            throw new NoSuchElementException("Statistics not found with id: " + id);
+            logger.error("Tried to found statitis with id {} not present", id);
+            throw new ResourceNotFoundException("Statistics not found with id: " + id);
         }
         return statistics.get();
     }
@@ -81,6 +86,7 @@ public class StatisticsManager implements IStatisticsManager {
         }
         statistics.setDataStreams(dataStreams);
         save(statistics);
+        logger.info("Processed new message");
     }
 
     protected DataStream generateDataStream(String id, String feed, StatisticsResults results) {
@@ -93,17 +99,17 @@ public class StatisticsManager implements IStatisticsManager {
 
     protected StatisticsResults getStatisticsResults(List<Integer> values) {
         StatisticsResults statisticsResults = new StatisticsResults();
-        statisticsResults.setMedia(getMedia(values));
-        statisticsResults.setModa(getModa(values));
-        statisticsResults.setMediana(getMediana(values));
-        statisticsResults.setMaximo(Collections.max(values));
-        statisticsResults.setMinimo(Collections.min(values));
-        statisticsResults.setDesviacionEstandar(getDesviacionEstandar(values));
-        statisticsResults.setCuartiles(List.of(getPercentil(values, 0.25), getPercentil(values, 0.5), getPercentil(values, 0.75)));
+        statisticsResults.setMean(getMean(values));
+        statisticsResults.setMode(getMode(values));
+        statisticsResults.setMedian(getMedian(values));
+        statisticsResults.setMaximum(Collections.max(values));
+        statisticsResults.setMinimum(Collections.min(values));
+        statisticsResults.setStandardDeviation(getStandardDeviation(values));
+        statisticsResults.setQuartiles(List.of(getPercentile(values, 0.25), getPercentile(values, 0.5), getPercentile(values, 0.75)));
         return statisticsResults;
     }
 
-    protected double getMedia(List<Integer> values) {
+    protected double getMean(List<Integer> values) {
         int sum = 0;
         for (int num : values) {
             sum += num;
@@ -111,7 +117,7 @@ public class StatisticsManager implements IStatisticsManager {
         return (double) sum / values.size();
     }
 
-    protected double getMediana(List<Integer> values) {
+    protected double getMedian(List<Integer> values) {
         int n = values.size();
         if (n % 2 == 0) {
             return (values.get(n / 2 - 1) + values.get(n / 2)) / 2.0;
@@ -120,7 +126,7 @@ public class StatisticsManager implements IStatisticsManager {
         }
     }
 
-    protected int getModa(List<Integer> values) {
+    protected int getMode(List<Integer> values) {
         int maxCount = 0;
         int moda = 0;
         for (int i = 0; i < values.size(); ++i) {
@@ -136,7 +142,7 @@ public class StatisticsManager implements IStatisticsManager {
         return moda;
     }
 
-    protected double getPercentil(List<Integer> values, double percentile) {
+    protected double getPercentile(List<Integer> values, double percentile) {
         int n = values.size();
         double index = percentile * (n - 1);
         if (index % 1 == 0) {
@@ -148,8 +154,8 @@ public class StatisticsManager implements IStatisticsManager {
         }
     }
 
-    protected double getDesviacionEstandar(List<Integer> values) {
-        double media = getMedia(values);
+    protected double getStandardDeviation(List<Integer> values) {
+        double media = getMean(values);
         double sum = 0;
         for (int num : values) {
             sum += Math.pow(num - media, 2);

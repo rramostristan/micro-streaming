@@ -9,69 +9,69 @@ public class StatisticsResults {
         processedAt = new Date();
     }
 
-    protected double media;
-    protected double mediana;
-    protected int moda;
-    protected double desviacionEstandar;
-    protected List<Double> cuartiles;
-    protected int maximo;
-    protected int minimo;
+    protected double mean;
+    protected double median;
+    protected int mode;
+    protected double standardDeviation;
+    protected List<Double> quartiles;
+    protected int maximum;
+    protected int minimum;
     protected Date processedAt;
 
-    public double getMedia() {
-        return media;
+    public double getMean() {
+        return mean;
     }
 
-    public void setMedia(double media) {
-        this.media = media;
+    public void setMean(double mean) {
+        this.mean = mean;
     }
 
-    public double getMediana() {
-        return mediana;
+    public double getMedian() {
+        return median;
     }
 
-    public void setMediana(double mediana) {
-        this.mediana = mediana;
+    public void setMedian(double median) {
+        this.median = median;
     }
 
-    public int getModa() {
-        return moda;
+    public int getMode() {
+        return mode;
     }
 
-    public void setModa(int moda) {
-        this.moda = moda;
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
-    public double getDesviacionEstandar() {
-        return desviacionEstandar;
+    public double getStandardDeviation() {
+        return standardDeviation;
     }
 
-    public void setDesviacionEstandar(double desviacionEstandar) {
-        this.desviacionEstandar = desviacionEstandar;
+    public void setStandardDeviation(double standardDeviation) {
+        this.standardDeviation = standardDeviation;
     }
 
-    public List<Double> getCuartiles() {
-        return cuartiles;
+    public List<Double> getQuartiles() {
+        return quartiles;
     }
 
-    public void setCuartiles(List<Double> cuartiles) {
-        this.cuartiles = cuartiles;
+    public void setQuartiles(List<Double> quartiles) {
+        this.quartiles = quartiles;
     }
 
-    public int getMaximo() {
-        return maximo;
+    public int getMaximum() {
+        return maximum;
     }
 
-    public void setMaximo(int maximo) {
-        this.maximo = maximo;
+    public void setMaximum(int maximum) {
+        this.maximum = maximum;
     }
 
-    public int getMinimo() {
-        return minimo;
+    public int getMinimum() {
+        return minimum;
     }
 
-    public void setMinimo(int minimo) {
-        this.minimo = minimo;
+    public void setMinimum(int minimum) {
+        this.minimum = minimum;
     }
 
     public Date getProcessedAt() {

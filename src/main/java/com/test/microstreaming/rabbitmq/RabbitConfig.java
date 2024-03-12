@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-
-
     @Value("${rabbitmq.exchange}")
     protected String exchange;
 
@@ -22,17 +20,17 @@ public class RabbitConfig {
     protected String queue;
 
     @Bean
-    public Queue queue(){
+    public Queue queue() {
         return new Queue(queue);
     }
 
     @Bean
-    public TopicExchange exchange(){
+    public TopicExchange exchange() {
         return new TopicExchange(exchange);
     }
 
     @Bean
-    public Binding binding(){
+    public Binding binding() {
         return BindingBuilder
                 .bind(queue())
                 .to(exchange())
@@ -40,8 +38,7 @@ public class RabbitConfig {
     }
 
     @Bean
-    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory){
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return rabbitTemplate;
+    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory) {
+        return new RabbitTemplate(connectionFactory);
     }
 }

@@ -25,7 +25,7 @@ public class DataStream {
         this.feed = feed;
     }
 
-    public StatisticsResults getResultsObject() {
+    public StatisticsResults getResults() {
         return JSONUtils.fromJson(results, new TypeReference<>() {});
     }
 

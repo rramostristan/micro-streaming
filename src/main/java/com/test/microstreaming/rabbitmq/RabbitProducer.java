@@ -21,19 +21,26 @@ public class RabbitProducer {
     @Value("${rabbitmq.queue}")
     protected String queue;
 
+    @Value("${rabbitmq.producer.enabled:false}")
+    protected boolean enabled;
+
     @Autowired
     protected AmqpTemplate rabbitTemplate;
 
     @Scheduled(fixedRateString = "${rabbitmq.produce.rate:60000}")
     public void sendMessage() {
-        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 1")));
-        rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 2")));
+        if (enabled) {
+            rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 1")));
+            rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 2")));
+        }
     }
 
     protected OpenGateMessage generateMessage(String device) {
         OpenGateMessage message = new OpenGateMessage();
         message.setDevice(device);
         message.setVersion("0.1");
+        message.setPath("192.168.0.1");
+        message.setTrustedBoot("REST");
         message.setDatastreams(List.of(getDataStream("temperature"), getDataStream("pressure")));
         return message;
     }
@@ -45,13 +52,12 @@ public class RabbitProducer {
         int limit = Objects.equals("temperature", id) ? 40 : 300;
         Long currentTime = System.currentTimeMillis();
         List<OpenGateDatapoint> datapoints = new ArrayList<>();
-        for (int i=0; i<10; i++) {
-            datapoints.add(getDatapoint(currentTime++,generateRandomInt(limit)));
+        for (int i = 0; i < 10; i++) {
+            datapoints.add(getDatapoint(currentTime++, generateRandomInt(limit)));
         }
         stream.setDatapoints(datapoints);
         return stream;
     }
-
 
     protected OpenGateDatapoint getDatapoint(Long time, Object value) {
         OpenGateDatapoint datapoint = new OpenGateDatapoint();

@@ -52,8 +52,6 @@ De esta manera, cada vez que se reciba un nuevo mensaje, se comprobará si exist
 
 Los dataStream estarán representados por la clase DataStream, que contará con el identificador del propio datastream, el feed y los resultados del análisis estadístico almacenados en formato JSON como se pide en el documento, además de la marca de tiempo en la que se ha producido dicho análisis.
 
-De esta manera, un documento tendrá el siguiente aspecto representado en formato JSON.
-
 Los resultados estadísticos se almacenarán en string en formato JSON generado a partir de la clase StatisticsResults, que almacenará las medidas de media, mediana, moda, desviación estándar, los cuartiles, máximo, mínimo y la fecha en la que se ha procesado. De esta forma, tendremos una estructura JSON de los mensajes de este tipo:
 
 ```
@@ -83,7 +81,7 @@ Los resultados estadísticos se almacenarán en string en formato JSON generado 
 
 ### Decisiones de Diseño
 
-n este apartado, explicaré las decisiones que he tomado a la hora de desarrollar la aplicación para cumplir con los requisitos especificados.
+En este apartado, explicaré las decisiones que he tomado a la hora de desarrollar la aplicación para cumplir con los requisitos especificados.
 
 En primer lugar, con el objetivo de seguir el patrón MVC, he dividido la lógica de la aplicación en diferentes carpetas que almacenan clases con un objetivo específico. Los controladores establecen los diferentes endpoints disponibles en nuestra API, los parámetros que aceptan y las respuestas que devuelven.
 
@@ -93,7 +91,7 @@ Todas las clases relacionadas con la gestión de RabbitMQ estarán en la misma c
 
 En esta carpeta se encuentra el consumidor, que se encarga de ejecutar de manera periódica el método encargado de recibir en batch los mensajes y procesarlos. Para que se ejecute de manera automática, se ha utilizado la anotación @Scheduled, que nos permite anotar métodos que queremos que se ejecuten automáticamente según las condiciones establecidas. También se ha creado un productor cuyo funcionamiento se puede deshabilitar a partir de una propiedad, que se encargará de crear unos mensajes periódicamente para que se pueda comprobar el funcionamiento de la aplicación sin la necesidad de enviar mensajes a la cola de manera manual. La frecuencia con la que se ejecutan ambos métodos también es configurable a través de las propiedades, ya sea con el archivo application.properties o a través de las variables de entorno especificadas en el docker-compose.yml.
 
-También se ha creado una clase de utilería con el objetivo de transformar los mensajes recibidos por Rabbit en objetos con los cuales trabajar, además de ser utilizada para almacenar los análisis estadísticos de un datastream en formato JSON en la base de datos, como se ha explicado anteriormente.
+También se ha creado una clase de utilería con el objetivo de transformar los mensajes recibidos por Rabbit en formato JSON en objetos con los cuales trabajar, además de ser utilizada para almacenar los análisis estadísticos de un datastream en formato JSON en la base de datos, como se ha explicado anteriormente.
 
 En cuanto a consideraciones de seguridad y monitoreo, se ha hecho uso de loggers que permiten a los usuarios tener una idea de las acciones que lleva a cabo el servicio, además de registrar las posibles excepciones que puedan tener lugar y que son tratadas a través de estructuras try-catch.
 

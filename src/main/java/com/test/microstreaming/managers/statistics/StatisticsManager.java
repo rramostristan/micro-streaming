@@ -60,7 +60,7 @@ public class StatisticsManager implements IStatisticsManager {
             Date start = convertToDate(startDate);
             Date end = convertToDate(endDate);
             if (start.after(end)) {
-                throw new CustomException("startDate must be previous to endDate");
+                throw new CustomException("startDate must be previous to endDate", HttpStatus.BAD_REQUEST);
             }
             return statisticsRepository.findByProcessedAtBetween(start, end);
         } else if (!ObjectUtils.isEmpty(startDate)) {

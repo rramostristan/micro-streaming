@@ -9,7 +9,7 @@ A continuación, explicaré las instrucciones necesarias para desplegar la soluc
 
 * En este directorio se encuentran los archivos docker-compose.yml, que permiten levantar la infraestructura necesaria para que la aplicación funcione, además de un Dockerfile que permite generar una imagen con la aplicación de Java Spring.
 
-* Dado que el docker-compose asume que ya existe una imagen con la aplicación de Java, es necesario, en primer lugar, crear la imagen Docker. Para ello, deberá ejecutar el comando `mvn clean install -Dmaven.test.skip=true` que se encargara de generar el jar usado en el Dockerfile, una vez ejecutado dicho comando se puede pasar a la creación de la imagen mediante el comando: `docker build -t micro-streaming .`
+* Dado que el docker-compose asume que ya existe una imagen con la aplicación de Java, es necesario, en primer lugar, crear la imagen Docker. Para ello, deberá ejecutar el comando `mvn clean install` que se encargara de generar el jar usado en el Dockerfile, una vez ejecutado dicho comando se puede pasar a la creación de la imagen mediante el comando: `docker build -t micro-streaming .`
 
 * Este comando se encargará de generar una imagen denominada micro-streaming. En caso de querer usar otro nombre, deberá modificar en el docker-compose el nombre de la imagen del servicio micro-streaming con el nombre elegido.
 

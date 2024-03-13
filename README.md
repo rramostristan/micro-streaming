@@ -15,9 +15,9 @@ A continuación, explicaré las instrucciones necesarias para desplegar la soluc
 
 * Con la imagen generada, solo será necesario ejecutar el archivo docker-compose. Para ello, se usará el comando `docker-compose up -d` para que se ejecute en segundo plano. Una vez que se quiera finalizar la ejecución de la aplicación, se usa el comando `docker-compose down`.
 
-* Cabe mencionar que se han expuesto los puertos para acceder tanta a Rabbit como a Mongo, por lo que en caso de que en su maquina ya se ejecuten estos servicios y ocupen los puertos por defecto, debera de cambiar los puertos mapeados del servicio en el docker-compose o bien comentarlos para que no se expongan.
+* Cabe mencionar que se han expuesto los puertos para acceder tanta a Rabbit como a Mongo, por lo que en caso de que en su máquina ya se ejecuten estos servicios y ocupen los puertos por defecto, debera de cambiar los puertos mapeados del servicio en el docker-compose o bien comentarlos para que no se expongan.
 
-* El swagger a partir del cual poder interactuar con la aplicación estar disponible por defecto en : http://localhost:8080/swagger-ui/index.htm
+* El swagger a partir del cual poder interactuar con la aplicación estar disponible por defecto en : http://localhost:8080/swagger-ui/index.html
 
 ## Documentación del desarrollo
 

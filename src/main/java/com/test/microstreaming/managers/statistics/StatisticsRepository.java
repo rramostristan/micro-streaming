@@ -2,15 +2,16 @@ package com.test.microstreaming.managers.statistics;
 
 import com.test.microstreaming.models.Statistics;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.Date;
 import java.util.List;
 
 public interface StatisticsRepository extends MongoRepository<Statistics, String> {
 
-    List<Statistics> findByDataStreams_Feed(String feed);
+    List<Statistics>  findByProcessedAtLessThan(Date processedAt);
 
-    List<Statistics> findByVersion(String version);
+    List<Statistics>  findByProcessedAtGreaterThan(Date processedAt);
 
-    List<Statistics> findByPath(String path);
+    List<Statistics>  findByProcessedAtBetween(Date startDate, Date endDate);
 
-    List<Statistics> findByTrustedBoot(String trustedBoot);
+    List<Statistics>  findByMessagesProcessed(int messagesProcessed);
 }

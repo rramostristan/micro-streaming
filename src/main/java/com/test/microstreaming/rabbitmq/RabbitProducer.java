@@ -46,27 +46,27 @@ public class RabbitProducer {
         message.setVersion("0.1");
         message.setPath("192.168.0.1");
         message.setTrustedBoot("REST");
-        message.setDatastreams(List.of(getDataStream("temperature"), getDataStream("pressure")));
+        message.setDatastreams(List.of(getDataStream("temperature" + System.currentTimeMillis(), "temperature"), getDataStream("pressure" + System.currentTimeMillis(),"pressure")));
         return message;
     }
 
-    protected OpenGateDataStreamMessage getDataStream(String id) {
+    protected OpenGateDataStreamMessage getDataStream(String id, String feed) {
         OpenGateDataStreamMessage stream = new OpenGateDataStreamMessage();
         stream.setId(id);
         stream.setFeed(id);
         int limit = Objects.equals("temperature", id) ? 40 : 300;
-        Long currentTime = System.currentTimeMillis();
         List<OpenGateDatapoint> datapoints = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            datapoints.add(getDatapoint(currentTime++, generateRandomInt(limit)));
+            datapoints.add(getDatapoint(generateRandomInt(limit)));
         }
         stream.setDatapoints(datapoints);
         return stream;
     }
 
-    protected OpenGateDatapoint getDatapoint(Long time, Object value) {
+    protected OpenGateDatapoint getDatapoint(Object value) {
         OpenGateDatapoint datapoint = new OpenGateDatapoint();
-        datapoint.setAt(time);
+        datapoint.setAt(System.currentTimeMillis());
+        datapoint.setFrom(System.currentTimeMillis());
         datapoint.setValue(value);
         return datapoint;
     }

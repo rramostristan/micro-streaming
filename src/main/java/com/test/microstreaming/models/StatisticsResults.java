@@ -1,13 +1,8 @@
 package com.test.microstreaming.models;
 
-import java.util.Date;
 import java.util.List;
 
 public class StatisticsResults {
-
-    public StatisticsResults() {
-        processedAt = new Date();
-    }
 
     protected double mean;
     protected double median;
@@ -16,7 +11,6 @@ public class StatisticsResults {
     protected List<Double> quartiles;
     protected int maximum;
     protected int minimum;
-    protected Date processedAt;
 
     public double getMean() {
         return mean;
@@ -72,13 +66,5 @@ public class StatisticsResults {
 
     public void setMinimum(int minimum) {
         this.minimum = minimum;
-    }
-
-    public Date getProcessedAt() {
-        return processedAt;
-    }
-
-    public void setProcessedAt(Date processedAt) {
-        this.processedAt = processedAt;
     }
 }

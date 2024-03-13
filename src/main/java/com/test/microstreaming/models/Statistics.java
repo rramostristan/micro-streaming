@@ -1,67 +1,57 @@
 package com.test.microstreaming.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.test.microstreaming.utils.JSONUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Document
 public class Statistics {
 
     @Id
-    protected String deviceId;
-    protected String path;
-    protected String trustedBoot;
-    protected String version;
-    protected List<DataStream> dataStreams = new ArrayList<>();
+    protected String id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Europe/Madrid")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    protected Date processedAt;
+    protected String dataResults;
+    protected int messagesProcessed;
 
-    public Statistics() {}
-
-    public Statistics(String deviceId, String path, String trustedBoot, String version) {
-        this.deviceId = deviceId;
-        this.path = path;
-        this.trustedBoot = trustedBoot;
-        this.version = version;
+    public Statistics() {
+        this.processedAt = new Date();
     }
 
-    public String getDeviceId() {
-        return deviceId;
+    public String getId() {
+        return id;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public List<DataStream> getDataStreams() {
-        return dataStreams;
+    public Date getProcessedAt() {
+        return processedAt;
     }
 
-    public void setDataStreams(List<DataStream> dataStreams) {
-        this.dataStreams = dataStreams;
+    public void setProcessedAt(Date processedAt) {
+        this.processedAt = processedAt;
     }
 
-    public String getPath() {
-        return path;
+    public StatisticsResults getDataResults() {
+        return JSONUtils.fromJson(dataResults, StatisticsResults.class);
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setDataResults(StatisticsResults dataResults) {
+        this.dataResults = JSONUtils.toJSON(dataResults);
     }
 
-    public String getTrustedBoot() {
-        return trustedBoot;
+    public int getMessagesProcessed() {
+        return messagesProcessed;
     }
 
-    public void setTrustedBoot(String trustedBoot) {
-        this.trustedBoot = trustedBoot;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public void setMessagesProcessed(int messagesProcessed) {
+        this.messagesProcessed = messagesProcessed;
     }
 }

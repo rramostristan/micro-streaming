@@ -6,6 +6,8 @@ services:
       - spring.data.mongodb.uri=mongodb://root:example@mongo:27017/
       - spring.data.mongodb.database=test
       - spring.rabbitmq.host=rabbitmq
+      - spring.rabbitmq.username=root
+      - spring.rabbitmq.password=example
       - rabbitmq.batch.size=10
       - rabbitmq.consume.rate=40000
       - rabbitmq.produce.rate=30000
@@ -44,5 +46,5 @@ services:
       - '15672:15672'
       - '5672:5672'
     environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=pass
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=example

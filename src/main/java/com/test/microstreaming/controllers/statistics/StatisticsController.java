@@ -2,7 +2,6 @@ package com.test.microstreaming.controllers.statistics;
 
 import com.test.microstreaming.managers.statistics.IStatisticsManager;
 import com.test.microstreaming.models.Statistics;
-import com.test.microstreaming.models.message.OpenGateMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,33 +32,16 @@ public class StatisticsController {
         return statisticsManager.findById(id);
     }
 
-    @GetMapping("/feed/{feed}")
-    @Operation(summary = "Returns the Statistics with at least one dataStream that has the same feed as the one passed by parameter, it's important to notice it doesn't actually filter the dataStreams with feeds other than the one passed by parameter")
-    public List<Statistics> findByFeed(@PathVariable String feed) {
-        return statisticsManager.findByFeed(feed);
+    @GetMapping("/processedat")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "Bad use of params")})
+    @Operation(summary = "If both params are present, it will return the statistics processed between the start and end date, if only the start param is present, it will return statistics processed after said date, if only the end is present it will return statistics processed before said date")
+    public List<Statistics> findByProcessedAt(@Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format") @RequestParam(required = false) String startDate, @Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format") @RequestParam(required = false) String endDate) {
+        return statisticsManager.findByDate(startDate, endDate);
     }
 
-    @GetMapping("/version/{version}")
-    @Operation(summary = "Returns the Statistics with the same version as the passed as parameter")
-    public List<Statistics> findByVersion(@PathVariable String version) {
-        return statisticsManager.findByVersion(version);
-    }
-
-    @GetMapping("/path/{path}")
-    @Operation(summary = "Returns the Statistics with the same version as the passed as parameter")
-    public List<Statistics> findByPath(@PathVariable String path) {
-        return statisticsManager.findByPath(path);
-    }
-
-    @GetMapping("/trustedboot/{trustedBoot}")
-    @Operation(summary = "Returns the Statistics with the same version as the passed as parameter")
-    public List<Statistics> findByTrustedBoot(@PathVariable String trustedBoot) {
-        return statisticsManager.findByTrustedBoot(trustedBoot);
-    }
-
-    @PostMapping
-    @Operation(summary = "Process the message to generate the data analysis")
-    public void proccessMessage(@RequestBody OpenGateMessage message) {
-        statisticsManager.processMessage(message);
+    @GetMapping("/messagesprocessed")
+    @Operation(summary = "Return statistics that processed the same number of messages as the passed one")
+    public List<Statistics> findByMessagesProcessed(@RequestParam int messagesProcessed) {
+        return statisticsManager.findByMessagesProcessed(messagesProcessed);
     }
 }

@@ -1,7 +1,6 @@
 package com.test.microstreaming.managers.statistics;
 
 import com.test.microstreaming.models.Statistics;
-import com.test.microstreaming.models.message.OpenGateMessage;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,13 +15,7 @@ public interface IStatisticsManager {
 
     boolean existsById(String id);
 
-    List<Statistics> findByFeed(String feed);
+    List<Statistics> findByDate(String startDate, String endDate);
 
-    List<Statistics> findByPath(String path);
-
-    List<Statistics> findByVersion(String version);
-
-    List<Statistics> findByTrustedBoot(String trustedBoot);
-
-    void processMessage(OpenGateMessage message);
+    List<Statistics> findByMessagesProcessed(int messagesProcessed);
 }

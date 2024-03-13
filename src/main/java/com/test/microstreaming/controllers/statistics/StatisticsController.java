@@ -35,7 +35,7 @@ public class StatisticsController {
     @GetMapping("/processedat")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "Bad use of params")})
     @Operation(summary = "If both params are present, it will return the statistics processed between the start and end date, if only the start param is present, it will return statistics processed after said date, if only the end is present it will return statistics processed before said date")
-    public List<Statistics> findByProcessedAt(@Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format") @RequestParam(required = false) String startDate, @Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format") @RequestParam(required = false) String endDate) {
+    public List<Statistics> findByProcessedAt(@Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format. If present all results show will have been processed after this date") @RequestParam(required = false) String startDate, @Parameter(description = "Must be in yyyy-MM-dd'T'HH:mm:ss format. If present all results show will have been processed before this date") @RequestParam(required = false) String endDate) {
         return statisticsManager.findByDate(startDate, endDate);
     }
 

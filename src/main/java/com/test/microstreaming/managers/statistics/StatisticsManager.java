@@ -57,7 +57,12 @@ public class StatisticsManager implements IStatisticsManager {
     public List<Statistics> findByDate(String startDate, String endDate) {
         checkDates(startDate, endDate);
         if (!ObjectUtils.isEmpty(startDate) && !ObjectUtils.isEmpty(endDate)) {
-            return statisticsRepository.findByProcessedAtBetween(convertToDate(startDate), convertToDate(endDate));
+            Date start = convertToDate(startDate);
+            Date end = convertToDate(endDate);
+            if (start.after(end)) {
+                throw new CustomException("startDate must be previous to endDate");
+            }
+            return statisticsRepository.findByProcessedAtBetween(start, end);
         } else if (!ObjectUtils.isEmpty(startDate)) {
             return statisticsRepository.findByProcessedAtGreaterThan(convertToDate(startDate));
         } else {

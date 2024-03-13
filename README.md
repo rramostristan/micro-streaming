@@ -17,6 +17,8 @@ A continuación, explicaré las instrucciones necesarias para desplegar la soluc
 
 * Cabe mencionar que se han expuesto los puertos para acceder tanta a Rabbit como a Mongo, por lo que en caso de que en su maquina ya se ejecuten estos servicios y ocupen los puertos por defecto, debera de cambiar los puertos mapeados del servicio en el docker-compose o bien comentarlos para que no se expongan.
 
+* El swagger a partir del cual poder interactuar con la aplicación estar disponible por defecto en : http://localhost:8080/swagger-ui/index.htm
+
 ## Documentación del desarrollo
 
 ### Estructura JSON de los mensajes

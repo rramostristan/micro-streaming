@@ -29,7 +29,7 @@ Para ello, he creado la clase OpenGateMessage, la cual tendrá los datos de la v
 
 La clase OpenGateDataStreamMessage contará con los campos ID del dataStream, el identificador del feed y una colección de objetos del tipo OpenGateDatapoint, que a su vez contiene los campos from, at y value. Este último será del tipo Object, aunque en este caso, a la hora de interpretarlo, dado que estamos obteniendo cálculos estadísticos, se tratará como un valor numérico del tipo int.
 
-A continuación, se puede observar la estructura del mensaje en formato JSON:
+A continuación, se puede observar la estructura del mensaje en formato JSON que se bera de enviar a la cola de RabbitMQ generada para que sea posible su procesado:
 
 ```
 {
@@ -47,6 +47,7 @@ A continuación, se puede observar la estructura del mensaje en formato JSON:
 }
 ```
 
+Para enviar los mensajes a traves de la UI de Rabbit, se puede acceder a http://localhost:15672/#/, introducir el usuario root con contraseña example, acceder a la cola micro_streaming y enviar el mensaje proporcionado anteriormente.
 
 ### Estructura JSON para almacenar los resultados
 

@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,14 +30,19 @@ public class RabbitProducer {
     @Autowired
     protected AmqpTemplate rabbitTemplate;
 
+    @Autowired
+    protected RabbitConfig rabbitConfig;
+
     @Scheduled(fixedRateString = "${rabbitmq.produce.rate:60000}")
     public void sendMessage() {
-        try {
-            rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 1")));
-            rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 2")));
-            logger.info("Two new messages sent");
-        } catch (Exception e) {
-            logger.error("Error sending messages", e);
+        if (rabbitConfig.checkConnectionAvailable()) {
+            try {
+                rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 1")).getBytes(StandardCharsets.UTF_8));
+                rabbitTemplate.convertAndSend(queue, JSONUtils.toJSON(generateMessage("Device 2")).getBytes(StandardCharsets.UTF_8));
+                logger.info("Two new messages sent");
+            } catch (Exception e) {
+                logger.error("Error sending messages", e);
+            }
         }
     }
 

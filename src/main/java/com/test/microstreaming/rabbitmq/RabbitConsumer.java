@@ -37,27 +37,36 @@ public class RabbitConsumer {
     @Autowired
     protected IStatisticsManager statisticsManager;
 
+    @Autowired
+    protected RabbitConfig rabbitConfig;
+
     @Scheduled(fixedRateString = "${rabbitmq.consume.rate:60000}")
     public void consume() {
-        OpenGateMessage message = new OpenGateMessage();
-        int receivedMessages = 0;
-        List<Integer> values = new ArrayList<>();
-        while (message != null && receivedMessages < batchSize) {
-            try {
-                message = JSONUtils.fromJson((String) amqpTemplate.receiveAndConvert(queue), OpenGateMessage.class);
-                if (message != null) {
-                    for (OpenGateDataStreamMessage dataStreamMessage : message.getDatastreams()) {
-                        for (OpenGateDatapoint datapoint : dataStreamMessage.getDatapoints()) {
-                            values.add((int) datapoint.getValue());
+        if (rabbitConfig.checkConnectionAvailable()) {
+            OpenGateMessage message = new OpenGateMessage();
+            int receivedMessages = 0;
+            List<Integer> values = new ArrayList<>();
+            byte[] content = new byte[]{};
+            while (content != null && receivedMessages < batchSize) {
+                try {
+                    content = (byte[]) amqpTemplate.receiveAndConvert(queue);
+                    if (content != null) {
+                        message = JSONUtils.fromJson(new String(content), OpenGateMessage.class);
+                        for (OpenGateDataStreamMessage dataStreamMessage : message.getDatastreams()) {
+                            for (OpenGateDatapoint datapoint : dataStreamMessage.getDatapoints()) {
+                                values.add((int) datapoint.getValue());
+                            }
                         }
+                        receivedMessages++;
                     }
-                    receivedMessages++;
+                } catch (Exception e) {
+                    logger.error("Error consuming message", e);
                 }
-            } catch (Exception e) {
-                logger.error("Error consuming message", e);
             }
+            processMessages(values, receivedMessages);
+        } else {
+            logger.warn("Connection not availble");
         }
-        processMessages(values, receivedMessages);
     }
 
     public void processMessages(List<Integer> values, int messagesProcessed) {

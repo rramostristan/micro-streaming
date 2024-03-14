@@ -11,6 +11,7 @@ services:
       - rabbitmq.batch.size=10
       - rabbitmq.consume.rate=40000
       - rabbitmq.produce.rate=30000
+      - rabbitmq.producer.enabled=true
     ports:
       - '8080:8080'
     depends_on:
@@ -40,7 +41,7 @@ services:
       - mongo
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3-management-alpine
     restart: always
     ports:
       - '15672:15672'
